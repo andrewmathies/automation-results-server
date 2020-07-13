@@ -1,36 +1,22 @@
-import fnv from 'fnv-plus'
+import express from 'express'
+require('log-timestamp')
 
-import Result from './interfaces/Result'
-import Results from './interfaces/Results'
+import { GetResultHandler, GetResultsHandler } from './handlers/Get'
+import { StoreResultHandler } from './handlers/Post'
 
-const key = (description: string, timestamp: Date) => {
-    let hash = fnv.hash(description + timestamp)
-    return hash.str()
-}
+const app = express()
+const port = 3001
 
-let dummyResult: Result = {
-    id: 0,
-    description: 'turn off bake',
-    fullName: 'Check that heating elements aren\'t active after stop cook request is sent',
-    failedExpectations: [
-        {
-            matcherName: 'cookmode',
-            message: 'this is an example message',
-            stack: '__',
-            passed: false,
-            expected: 'cookmode.none',
-            actual: 'cookmode.bake'
-        }
-    ],
-    passedExpectations: [],
-    deprecationWarnings: [],
-    pendingReason: '',
-    status: 'fail',
-    duration: 3,
-}
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
 
-let results: Results = {}
-results[key('turn off bake 7/9/20', new Date())] = dummyResult
+app.get('/api/result', GetResultsHandler)
+app.get('/api/result/:id', GetResultHandler)
+app.post('/api/result/:id', StoreResultHandler)
 
-
-console.log(results)
+app.listen(port, () => {
+    console.log('server starting on port ' + port)
+})
