@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "tsc": "tsc",
-    "dev": "tsc && node build\\index.js"
+    "dev": "tsc && node build\\index.js",
+    "prod": "tsc && nohup nodejs build/index.js &"
   },
   "author": "Andrew Mathies",
   "license": "ISC",
