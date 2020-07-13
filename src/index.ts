@@ -5,7 +5,7 @@ import { GetResultHandler, GetResultsHandler } from './handlers/Get'
 import { StoreResultHandler } from './handlers/Post'
 
 const app = express()
-const port = 3001
+const port = 3000
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
