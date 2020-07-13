@@ -1,6 +1,6 @@
 import Expectation from './Expectation'
 
-export default interface ResultModel {
+export default interface Result {
     id: number
     description: string
     fullName: string
