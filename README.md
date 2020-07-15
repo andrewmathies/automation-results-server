@@ -9,3 +9,4 @@
     - store a result
     - get a result by key
     - get all results. TODO: paginate, queries
+

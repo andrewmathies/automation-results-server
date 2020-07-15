@@ -3,6 +3,14 @@ require('log-timestamp')
 
 import { GetResultHandler, GetResultsHandler } from './handlers/Get'
 import { StoreResultHandler } from './handlers/Post'
+import { Load } from './data/Store'
+import { exit } from 'process'
+
+const notAbleToLoad = Load('./test.json')
+
+if (notAbleToLoad) {
+    exit()
+}
 
 const app = express()
 const port = 3000

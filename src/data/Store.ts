@@ -1,28 +1,8 @@
 import fnv from 'fnv-plus'
+import fs from 'fs'
 
 import Result from '../interfaces/Result'
 import Results from '../interfaces/Results'
-
-let dummyResult: Result = {
-    id: 0,
-    description: 'turn off bake',
-    fullName: 'Check that heating elements aren\'t active after stop cook request is sent',
-    failedExpectations: [
-        {
-            matcherName: 'cookmode',
-            message: 'this is an example message',
-            stack: '__',
-            passed: false,
-            expected: 'cookmode.none',
-            actual: 'cookmode.bake'
-        }
-    ],
-    passedExpectations: [],
-    deprecationWarnings: [],
-    pendingReason: '',
-    status: 'fail',
-    duration: 3,
-}
 
 let results: Results = {}
 
@@ -31,9 +11,22 @@ const key = (description: string, timestamp: Date) => {
     return hash.str()
 }
 
-results[key('turn off bake', new Date())] = dummyResult
+// maybe should go somewhere else. this loads json file into results at boot instead of using dummy data
+export const Load = (path: string): boolean => {
+    let data = fs.readFileSync(path)
+
+    try {
+        results = JSON.parse(data.toString())
+        return false
+    } catch (err) {
+        console.error('could not read file at: ' + path)
+        console.log(err)
+        return true
+    }
+}
+
 /*
-const GetResult = (description: string): Result => {
+export const GetResult = (description: string): Result => {
     const k = key(description, new Date()) 
     const result = results[k]
 
@@ -62,3 +55,28 @@ export const StoreResult = (result: Result): Result => {
     results[k] = result
     return result
 }
+
+/*
+let dummyResult: Result = {
+    id: 0,
+    description: 'turn off bake',
+    fullName: 'Check that heating elements aren\'t active after stop cook request is sent',
+    failedExpectations: [
+        {
+            matcherName: 'cookmode',
+            message: 'this is an example message',
+            stack: '__',
+            passed: false,
+            expected: 'cookmode.none',
+            actual: 'cookmode.bake'
+        }
+    ],
+    passedExpectations: [],
+    deprecationWarnings: [],
+    pendingReason: '',
+    status: 'fail',
+    duration: 3,
+}
+
+results[key('turn off bake', new Date())] = dummyResult
+*/
